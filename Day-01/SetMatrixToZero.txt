@@ -1,0 +1,177 @@
+ --> Brute force approach  -- SC- 0(M*N) TC - 0(M*N)
+
+ Taking a another matrix visitor(cpy of original matrix) where we make all row and coloumn  zero of given zero --->
+
+Code -->
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        int m = matrix[0].size();
+        vector<vector<int>> ans= matrix;
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(matrix[i][j] == 0){
+                    for(int k=0; k<m; k++){
+                        ans[i][k] = 0;
+                    }
+                }
+            }
+        }
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(matrix[i][j] == 0){
+                    for(int k=0; k<n; k++){
+                        ans[k][j] = 0;
+                    }
+                }
+            }
+        }
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                matrix[i][j] = ans[i][j];
+            }
+        }
+    }
+};
+
+-----------------------------------------------------------------------------
+Brute Force approach 2 -- SC - 0(1) TC -0(M*N)
+
+by making the non-zero value to some negative number in the row and coloumn in which zero has occured and after that we make all those value to negative values...
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        int m = matrix[0].size();
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(matrix[i][j] == 0){
+                    for(int k=0; k<m; k++){
+                        if(matrix[i][k] != 0){
+                            matrix[i][k] = -1;
+                        }
+                    }
+                }
+            }
+        }
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(matrix[i][j] == 0){
+                    for(int k=0; k<n; k++){
+                        if(matrix[k][j] != 0){
+                            matrix[k][j] = -1;
+                        }
+                    }
+                }
+            }
+        }
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(matrix[i][j] == -1{
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+    }
+};
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+optimized approach one --> using hashset SC-0(N+M) TC - 0(N*M)
+
+we are using set to store the indexes of elements where zero has occured and then corresponding make that row and coloumn zero
+
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        int m = matrix[0].size();
+        unordered_set<int> setRows; 
+        unordered_set<int> setColumns; 
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(matrix[i][j] == 0){
+                    setRows.insert(i);
+                    setColumns.insert(j);
+                }
+            }
+        }
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(setRows.count(i) > 0 || setColumns.count(j) > 0){
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+    }
+};
+
+--------------------------------------
+Optimized approach two (BEST)  --> SC - 0(1) TC -0(N*M)
+
+
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+        bool firstRowZero = false;
+        bool firstColZero = false;
+
+        // Check if the first row contains any zeros
+        for (int j = 0; j < cols; j++) {
+            if (matrix[0][j] == 0) {
+                firstRowZero = true;
+                break;
+            }
+        }
+
+        // Check if the first column contains any zeros
+        for (int i = 0; i < rows; i++) {
+            if (matrix[i][0] == 0) {
+                firstColZero = true;
+                break;
+            }
+        }
+
+        // Mark zeros in the first row and column
+        for (int i = 1; i < rows; i++) {
+            for (int j = 1; j < cols; j++) {
+                if (matrix[i][j] == 0) {
+                    matrix[0][j] = 0;
+                    matrix[i][0] = 0;
+                }
+            }
+        }
+
+        // Set zeros based on marks in the first row and column
+        for (int i = 1; i < rows; i++) {
+            for (int j = 1; j < cols; j++) {
+                if (matrix[0][j] == 0 || matrix[i][0] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        // Set zeros in the first row if necessary
+        if (firstRowZero) {
+            for (int j = 0; j < cols; j++) {
+                matrix[0][j] = 0;
+            }
+        }
+
+        // Set zeros in the first column if necessary
+        if (firstColZero) {
+            for (int i = 0; i < rows; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+};
+
+
+
