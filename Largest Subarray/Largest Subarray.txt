@@ -1,0 +1,21 @@
+
+class Solution{
+    public:
+    int maxLen(vector<int>&A, int n)
+    {  
+        long sum = 0;
+        int maxi = 0;
+        map<int,int>ans;
+        for(int i=0;i<n;i++){  // storing the [prefix sum ,index] ->[key , value]  
+            sum+=A[i];                     
+            if(sum==0) maxi=max(maxi,i+1);   //base case if the sum anyhow becomes zero
+            else if(ans.find(sum)!=ans.end()){  // if the sum again become the same then we say that to that sum from that element to the current becomes zero                maxi=max(maxi,i-ans[sum]);  //store the answer 
+            }
+            else{
+                ans.insert({sum,i});  else we have to insert the pairs in map
+            }
+            
+        }
+        return maxi;
+    }
+};
